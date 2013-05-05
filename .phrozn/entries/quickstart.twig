@@ -1,0 +1,219 @@
+layout: default.twig
+permalink: quickstart/
+quickstart: active
+---
+
+<section class='section-wrapper about-page-w'>
+    <div class='container'>
+        <h1 class='section-main-header'>Quickstart Guide</h1>
+        <div class='row row-separated'>
+            <h3 class='section-header'>Principles</h3>
+            <div class='span5'>
+                <p class='section-paragraph'>Sherlock uses a "Fluid" interface that relies heavily on method chaining and the core Sherlock object.  Operations (search, index, etc) are built from the Sherlock object with methods, while various helpers are available as static methods.</p>
+                <p class='section-paragraph'>All projects will require a base Sherlock component.  Include the Composer autoload file if you haven't done so already, then instantiate a Sherlock object.</p>
+
+                <p class='section-paragraph'>Next, tell Sherlock about a node in your ElasticSearch cluster.  By default, Sherlock will connect to the provided node and auto-detect the rest of your cluster (you can disable this auto-detection and provide a complete list yourself).</p>
+
+                <p class='section-paragraph'>That's it, Sherlock is now ready to start accessing/indexing/querying your cluster!</p>
+            </div>
+            <div class='span7'>
+                <pre class="prettyprint linenums lang-php">require 'vendor/autoload.php';
+$sherlock = new \Sherlock\Sherlock;
+$sherlock->addNode("localhost", 9200);</pre>
+            </div>
+        </div>
+
+        <div class='row row-separated'>
+            <h3 class='section-header'>Index Operations</h3>
+            <div class='span5'>
+                <p class='section-paragraph'>Sherlock provides functionality that lets you operate directly on ElasticSearch indices, such as creating an index, updating mappings or deleting the index.  Index operations are performed after retrieving an index object from the Sherlock class.</p>
+                <p class='section-paragraph'>Sherlock is flexible about how you specify the index (or indices)</p>
+
+            </div>
+            <div class='span7'>
+                <pre class="prettyprint lang-php">//Create an index object, passing the index name in the constructor
+//All index operations (create, update, delete, etc) will go through this object.
+$index = $sherlock->index('testIndex');
+
+//The constructor can contain any number of indices to operate on
+$index = $sherlock->index('testIndex', 'testIndex2', 'testIndex3');
+
+//Or you can set the index later with a method
+$index = $sherlock->index();
+$index->index('testIndex');</pre>
+            </div>
+        </div>
+
+        <div class='row row-separated'>
+            <h3 class='section-header'>Mappings and settings</h3>
+            <div class='span5'>
+                <p class='section-paragraph'>Once you've specified your index, adding per-index settings and mappings is trivial:</p>
+
+            </div>
+            <div class='span7'>
+                <pre class="prettyprint lang-php">//Let's add some settings
+$settings = Sherlock::indexSettings()->refresh_interval("1s")
+                                     ->number_of_replicas(2);
+
+//Add two mappings, one a string and one a date
+$mapping = Sherlock::mappingBuilder('testType')->String()
+                                               ->field('testStringField');
+$mapping2 = Sherlock::mappingBuilder('testType')->Date()
+                                                ->field('testDateField')
+                                                ->format("YYYY-MM-dd");
+
+//Set the mappings and settings in one method-chained line
+$index->settings($settings)->mappings($mapping, $mapping2);
+
+//Create the index.  This will apply whatever settings have been configured
+$response = $index->create();
+
+//This will say "true" if successful
+echo $response->ok;
+
+//Delete the index
+$response = $index->delete();</pre>
+            </div>
+        </div>
+
+
+
+        <div class='row row-separated'>
+            <h3 class='section-header'>Adding Documents</h3>
+            <div class='span5'>
+                <p class='section-paragraph'>At the moment, Sherlock only supports adding documents via an associative array or JSON. An ORM-like interface may be added eventually, but the syntax verbosity required to cover all possible document permutations seems a bit unwieldy...especially when compared to just building the doc out of a JSON string or array.</p>
+
+            </div>
+            <div class='span7'>
+                <pre class="prettyprint lang-php">$doc = array("field" => "test", "field2" => "test2")
+
+//An index and type are specified in addition to the document
+$doc = $sherlock->document()->index('test123')->type('tweet')->document($doc);
+
+//Execute the indexing request
+$doc->execute();</pre>
+            </div>
+        </div>
+
+
+        <div class='row row-separated'>
+            <h3 class='section-header'>Search Queries</h3>
+            <div class='span5'>
+                <p class='section-paragraph'>Ahh...search is what ElasticSearch is all about!</p>
+                <p class='section-paragraph'>Sherlock provides a powerful and relatively concise ORM-like interface to build search queries.  Most search components also accept associative arrays, so that queries can be composed from various data sources without iterating through the ORM methods.</p>
+                <p class='section-paragraph'>The advantage of using the ORM interface comes from extensive auto-complete in your IDE.  The ORM methods are all documented with PHPDoc statements, allowing your IDE to inspect the methods and provide type-hinting, argument checking and auto-completion...a handy feature since ElasticSearch has dozens of queries, each with dozens of unique parameters.</p>
+
+            </div>
+            <div class='span7'>
+                <pre class="prettyprint lang-php">//Build a new search request
+$request = $sherlock->search();
+
+//populate a Term query to start
+$termQuery = Sherlock::queryBuilder()->Term()->field("message")
+                                             ->term("ElasticSearch")
+
+//Set the index, type and from/to parameters of the request.
+$request->index("test")
+        ->type("tweet")
+        ->from(0)
+        ->to(10);
+        ->query($termQuery);
+
+//Execute the search and return results
+$response = $request->execute();
+
+echo "Took: ".$response->took."\r\n";
+echo "Number of Hits: ".count($response)."\r\n";
+
+//Iterate over the hits and print out some data
+foreach($response as $hit)
+{
+    echo $hit['score'].' - '.$hit['source']['message']."\r\n";
+}</pre>
+            </div>
+        </div>
+
+
+        <div class='row row-separated'>
+            <h3 class='section-header'>Now a little more complicated...</h3>
+            <div class='span5'>
+                <p class='section-paragraph'>Ok, cool.  But those queries are softballs...can Sherlock be used for complicated, nested queries?  You bet it can!  Here is an example of a Boolean query, which accepts three nested queries:</p>
+
+            </div>
+            <div class='span7'>
+                <pre class="prettyprint lang-php">//Let's try a more advanced query now.
+//Each section is it's own variable to help show how everything fits together
+$must = Sherlock::queryBuilder()->Term()->field("message")
+                                        ->term("ElasticSearch");
+
+$should = Sherlock::queryBuilder()->Match()->field("author")
+                                           ->query("Zachary Tong")
+                                           ->boost(2.5);
+
+$must_not = Sherlock::queryBuilder()->Term()->field("message")
+                                    ->term("Solr");
+
+//Now we can compose the entire Bool query, by nesting the prior three
+$bool = Sherlock::queryBuilder()->Bool->must($must)
+                                      ->should($should)
+                                      ->must_not($must_not);
+
+//Finally, set the query and execute
+$request->query($bool)->execute();</pre>
+            </div>
+        </div>
+
+
+        <div class='row row-separated'>
+            <h3 class='section-header'>But it's not free enough, man</h3>
+            <div class='span5'>
+                <p class='section-paragraph'>Let's compose some queries using associative arrays.  This format allows you to specify the parameters as an array, while still gaining the formatting of the parent query object (in this case, a Term query).  This query is identical to the one above:</p>
+
+            </div>
+            <div class='span7'>
+                <pre class="prettyprint lang-php">$manualData = array("field" => "message", "term" => "ElasticSearch");
+$manualTermQuery = Sherlock::queryBuilder()->Term($manualData);
+
+$request->index("test")
+        ->type("tweet")
+        ->from(0)
+        ->to(10);
+        ->query($termQuery);</pre>
+            </div>
+        </div>
+
+
+        <div class='row row-separated'>
+            <h3 class='section-header'>JSON is perfection. Resistance is futile.</h3>
+            <div class='span5'>
+                <p class='section-paragraph'>Still too stifling or difficult given your existing code?  No problem, Sherlock allows 100% "raw" queries, either in array form or pure JSON:</p>
+
+            </div>
+            <div class='span7'>
+                <pre class="prettyprint lang-php">//Compose with an array
+$jsonArray = array("query" => array("term" => array("message" => array("value" => "ElasticSearch"))))
+$rawTermQuery = Sherlock::queryBuilder()->Raw($jsonArray);
+
+//or JSON
+$json = json_encode($jsonArray);
+$rawTermQuery = Sherlock::queryBuilder()->Raw($json);</pre>
+            </div>
+        </div>
+
+
+        <div class='row row-separated'>
+            <h3 class='section-header'>Next Steps</h3>
+            <div class='span8 offset2'>
+                <p class='section-paragraph'>If you've made it through this somewhat long quickstart and are still interested in Sherlock, be sure to check out the <a href="/documentation/">Full Documentation</a> to see the full capability of Sherlock.  This was just a brief intro, Sherlock has a lot of fun goodies to help you query, manage and work with ElasticSearch.</p>
+            </div>
+
+        </div>
+
+    </div>
+</section>
+
+
+
+
+<h3></h3>
+<p></p>

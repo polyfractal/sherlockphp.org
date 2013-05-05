@@ -1,0 +1,16 @@
+#proprietary theme media/styles - can't include these in a repo for licensing reasons
+.phrozn/media/fonts/*
+.phrozn/media/images/*
+
+#editor related
+.idea
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+Icon?
+ehthumbs.db
+Thumbs.db

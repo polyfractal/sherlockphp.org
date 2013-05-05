@@ -1,0 +1,52 @@
+layout: default.twig
+permalink: installation/
+quickstart: installation
+---
+<div class="title"><h2>Installation</div>
+
+<p>Getting up and running with Sherlock is simple, although there are a few requirements:</p>
+<p>
+<ul>
+    <li>PHP version >= 5.3.0</li>
+    <li><a href="http://getcomposer.org">Composer</a></li>
+    <li><a href="http://elasticsearch.org">ElasticSearch</a> (no surprise here!)</li>
+</ul>
+</p>
+
+<h3>Installation via Composer</h3>
+<p>The recommended installation method for Sherlock is through <a href="http://getcomposer.org">Composer</a>.</p>
+<p>
+<ol>
+    <li>Add <code>sherlock/sherlock</code> as a dependency in your project's <code>composer.json</code> file:<br/>
+<pre class="prettyprint"><code class="language-json">{
+    "require": {
+        "sherlock/sherlock": "~0.1"
+    }
+}</code></pre>
+    </li>
+    <li>Download and install Composer (if you don't have it installed already):<br/>
+        <pre class="prettyprint"><code class="language-bash">curl -s http://getcomposer.org/installer | php</code></pre>
+    </li>
+    <li>Install Sherlock and various dependencies.  This will create a /vendor/ directory with Sherlock and associated libraries:<br/>
+        <pre class="prettyprint"><code class="language-bash">php composer.phar install</code></pre>
+    </li>
+    <li>
+        <p>Require Composer's autoloader</p>
+        <p>Composer also prepares an autoload file that's capable of autoloading all of the classes in any of the libraries that it downloads. To use it, just add the following line to your code's bootstrap process:</p>
+        <pre class="prettyprint"><code class="language-php">require 'vendor/autoload.php';</code></pre>
+    </li>
+</ol>
+</p>
+<h3>Manual Installation</h3>
+<p>Sherlock can be installed even if you don't use Composer.  Download Sherlock and include the following in your index.php or equivalent</p>
+<pre class="prettyprint"><code class="language-json">&lt;?php
+require 'Sherlock/Sherlock.php';
+\Sherlock\Sherlock::registerAutoloader();</code></pre>
+<p>However, this only loads Sherlock, and not the dependencies.  You'll have to download and install these libraries on your own:</p>
+<ul>
+    <li><a href="https://github.com/symfony/EventDispatcher">Symfony EventDispatcher</a></li>
+    <li><a href="https://github.com/jbroadway/analog">Analog</a></li>
+</ul>
+<h3>All done!</h3>
+<p>Once you have Sherlock installed, head over to the <a href="quickstart.html">Quickstart Guide</a> to get a crashcourse in how Sherlock works.  Alternatively, check out the <a href="documentation.html">Full Documentation</a> to get a feel for the entire library.</p>
+

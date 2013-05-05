@@ -1,0 +1,99 @@
+layout: default.twig
+permalink: documentation/
+
+documentation: active
+overview: active
+
+docs: true
+---
+
+
+<div class="container docs-w">
+    <!-- Docs nav
+    ================================================== -->
+    <div class="row">
+        <div class="span3 bs-docs-sidebar">
+            <ul class="nav nav-list bs-docs-sidenav" data-spy="affix" data-offset-top="200">
+                <li class="active"><a href="#what-is-sherlock"><i class="icon-chevron-right"></i>What is Sherlock?</a></li>
+                <li><a href="#philosophy"><i class="icon-chevron-right"></i> Philosophy</a></li>
+                <li><a href="#sherlock-alternatives"><i class="icon-chevron-right"></i> Sherlock Alternatives</a></li>
+                <li><a href="#getting-help"><i class="icon-chevron-right"></i> Getting Help</a></li>
+            </ul>
+        </div>
+        <div class="span9">
+
+
+            <!-- What is Sherlock
+            ================================================== -->
+            <section id="what-is-sherlock" class="sectiondoc">
+                <div class="page-header">
+                    <h1>1. What is Sherlock?</h1>
+                </div>
+                <p class="lead">
+                    Sherlock is a PHP (>=5.3) client for <a href="http://elasticsearch.org">ElasticSearch</a>.  Sherlock provides an easy, simple interface to search and manage your ElasticSearch cluster.
+                </p>
+                <p>
+                    ElasticSearch operates through a JSON protocol.  While the JSON format is great for testing new queries on the commandline, it is very verbose and unpleasant to write in scripts and applications.  Multi-line JSON strings are error prone, difficult to read and have zero syntax-highlighting/type-hinting from your IDE
+                </p>
+                <p>Sherlock provides a relatively lightweight wrapper over the ElasticSearch API protocol.  It provides a one-to-one mapping to the underlying API, using as similar of names as possible.  Unlike a simple wrapper, we have included certain functionality that is useful to all users of ElasticSearch (such as automatic round-robin requests to the cluster, etc).</p>
+            </section>
+
+            <!-- Philosophy
+            ================================================== -->
+            <section id="philosophy" class="sectiondoc">
+                <div class="page-header">
+                    <h1>2. Philosophy</h1>
+                </div>
+                <p class="lead">
+                    Sherlock aims to continue the precendent set by ElasticSearch: work out of the box with minimal configuration and provide a simple interface.
+                </p>
+                <p>Sherlock strongly believes that the developer has enough to remember with their own code.  Sherlock goes to great lengths to simplify the interface between developer and ElasticSearch to a few simple classes.  The developer should never need to stop and look up a class name to instantiate, or dig through docs to remember which class accepts which arguments.</p>
+                <p>
+                    With that in mind, however, it is clear that simple interfaces will not provide the needs of all developers.  Should it be nescessary, developers can surface more advanced features out of the Sherlock core.  These capabilities are documented in the Sherlock document, but not necessarily "advertised" by the main Sherlock object.
+                </p>
+                <p>
+                    We want to keep the main interface clean and accessible for the 90% scenarios while providing full capability for the final 10% edge cases.</p>
+                <p>Regarding programatic style, Sherlock tries to adhere to a style of method chaining and "Fluid" interface.  Internally, magic methods and type-hinting are relied upon heavily to provide a flexible and intuitive API that minimizes the number of classes that need to be remembered</p>
+            </section>
+
+            <!-- Alternatives
+            ================================================== -->
+            <section id="sherlock-alternatives" class="sectiondoc">
+                <div class="page-header">
+                    <h1>3. Sherlock Alternatives</h1>
+                </div>
+                <p class="lead">
+                   We love Sherlock...
+                </p>
+                <p>...but maybe you wont.  That certainly makes us sad, and we'd love to know why (submit an issue or write an email on the list!), but it's a situation that is understandable.  A library can't be everything for everyone.</p>
+                <p>
+                   There are a couple other PHP client libraries for ElasticSearch, in varying states of maturity and capability:
+                </p>
+                <ul>
+                    <li><a href="https://github.com/ruflin/Elastica">Elastica</a> - A fairly mature and well tested library.  Uses a more verbose "Zend" style interface.  Actively maintained.</li>
+                    <li><a href="https://github.com/nervetattoo/elasticsearch">ElasticSearch</a> - Barebones wrapper on top of cURL. All commands/queries are formulated using associative arrays. Actively maintained.</li>
+                </ul>
+            </section>
+
+            <!-- Get Help
+           ================================================== -->
+            <section id="getting-help" class="sectiondoc">
+                <div class="page-header">
+                    <h1>4. Getting Help</h1>
+                </div>
+                <p class="lead">
+                    If you run into trouble, we'd love to help!
+                </p>
+                <p>Since the documentation is still actively being created, and Sherlock is undergoing a lot of changes due to it's young nature, you will probably have questions.  There are three great places to get my attention:</p>
+                <ul>
+                    <li><a href="https://twitter.com/ZacharyTong">Ping me on Twitter @ZacharyTong</a> - I keep an eye on my Twitter account, so drop me a message at any time</li>
+                    <li><a href="https://groups.google.com/forum/?fromgroups#/sherlockphp">The SherlockPHP Email List</a> - Probably the best place for discussions, bug reports or general questions.</li>
+                    <li>#ElasticSearch or #SherlockPHP on Freenode - I idle in both channels as "polyfractal", feel free to ping me whenever!</li>
+                    <li><a href="https://github.com/polyfractal/sherlock/issues">File an Issue</a> - Issues are closely monitored, so if you've run into a bug, file it there!  If you just have a question, try email or IRC first.</li>
+                </ul>
+            </section>
+
+
+        </div>
+    </div>
+</div>

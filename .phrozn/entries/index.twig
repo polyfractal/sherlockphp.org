@@ -1,0 +1,78 @@
+layout: default.twig
+permalink: /
+index: active
+---
+
+
+<div class='carousel slide over-something' id='homepage-carousel'>
+    <div class='carousel-inner slider-w'>
+        <div class='active item'>
+            <div class='container'>
+                <h1 class='slider-header'>So simple...its <strong>elementary</strong>.</h1>
+                <h2 class='slider-sub-header'>Sherlock is a feature-rich ElasticSearch client for PHP.</h2>
+                <div class='cta'>
+                    <a href="/quickstart/" class="btn btn-cta"><i class='icon-download' style="margin-right:5px"></i>Get Started</a>
+                    <a href="https://github.com/polyfractal/sherlock" class="btn btn-cta"><i class='icon-github-sign' style="margin-right:5px"></i> Fork on Github</a>
+                </div>
+            </div>
+        </div>
+        <div style="margin-left:auto; margin-right:auto; margin-top:-40px; text-align:left; width:700px">
+            <pre class="prettyprint linenums language-php" style="margin-left:20px">//Build a new search request
+$request = $sherlock->search();
+
+//populate a Term query to start
+$termQuery = Sherlock::queryBuilder()->Term()->field("message")
+                                             ->term("ElasticSearch")
+
+//Set the index, type and from/to parameters of the request.
+$request->index("test")
+        ->type("tweet")
+        ->from(0)
+        ->to(10);
+        ->query($termQuery);
+
+//Execute the search and return results
+$response = $request->execute();
+
+echo "Took: ".$response->took."\r\n";
+echo "Number of Hits: ".count($response)."\r\n";
+
+//Iterate over the hits and print out some data
+foreach($response as $hit)
+{
+    echo $hit['score'].' - '.$hit['source']['message']."\r\n";
+}</pre>
+        </div>
+    </div>
+</div>
+<div class='sub-slider-features'>
+    <div class='container'>
+        <div class='row'>
+            <div class='span4'>
+                <div class='info-bullet'>
+                    <i class='icon-info-sign'></i>
+                    <h5>What the Deuce?</h5>
+                    <p >Sherlock is a PHP (>=5.3.0) client for ElasticSearch.  Sherlock provides an easy, simple interface to search and manage your ElasticSearch cluster.
+                    </p>
+                </div>
+            </div>
+            <div class='span4'>
+                <div class='info-bullet'>
+                    <i class='icon-magic'></i>
+                    <h5>Philosophy</h5>
+                    <p>Few class names to remember, intuitive interface, one-to-one mapping with ES Query DSL, high performance.</p>
+                    <p>Code like you have magic powers.</p>
+                </div>
+            </div>
+            <div class='span4'>
+                <div class='info-bullet'>
+                    <i class='icon-cogs'></i>
+                    <h5>Flexibility</h5>
+                    <p>Sherlock provides a robust, powerful ORM-like interface to ElasticSearch.</p>
+                    <p>But hey, you're a free spirit. We respect that.  Sherlock accepts associative arrays or even raw JSON.  Use as much, or as little, of the ORM as you need.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

@@ -1,0 +1,232 @@
+layout: default.twig
+permalink: documentation/installation/
+
+documentation: active
+installation: active
+
+docs: true
+---
+
+
+<div class="container docs-w">
+    <!-- Docs nav
+    ================================================== -->
+    <div class="row">
+        <div class="span3 bs-docs-sidebar">
+            <ul class="nav nav-list bs-docs-sidenav" data-spy="affix" data-offset-top="200">
+                <li class="active"><a href="#requirements"><i class="icon-chevron-right"></i>Requirements</a></li>
+                <li><a href="#installation"><i class="icon-chevron-right"></i> Installation</a></li>
+                <li><a href="#sherlock-configuration"><i class="icon-chevron-right"></i> Sherlock Configuration</a></li>
+                <li><a href="#connecting-to-your-cluster"><i class="icon-chevron-right"></i> Connecting to your cluster</a></li>
+                <li><a href="#logging"><i class="icon-chevron-right"></i> Logging</a></li>
+
+            </ul>
+        </div>
+
+
+        <div class="span9">
+
+
+            <!-- Requirements
+            ================================================== -->
+            <section id="requirements" class="sectiondoc">
+                <div class="page-header">
+                    <h1>1. Requirements</h1>
+                </div>
+                <p class="lead">
+                    Sherlock's requirements are fairly minimal, and easily installed if you use composer:
+                </p>
+
+                <ul>
+                    <li>PHP >= 5.3</li>
+                    <li><a href="http://elasticsearch.org">ElasticSearch</a> (no surprise here!)</li>
+                    <li><a href="http://getcomposer.org">Composer</a></li>
+                </ul>
+                <div class="alert alert-info">
+                    <strong>Note:</strong> Sherlock uses several more modern features of PHP, so versions >= 5.3 are absolutely needed.  There is no planned support for older versions.
+                </div>
+
+                <p>
+                    If you don't wish to use Composer, you will have to manually download and install several dependencies:
+                </p>
+                <ul>
+                    <li><a href="https://github.com/jbroadway/analog/">Analog</a> (Version 1.0.2-stable)</li>
+                    <li><a href="https://github.com/symfony/EventDispatcher">Symfony EventDispatcher</a> (Version >= 2.1, < 3.0)</li>
+                </ul>
+            </section>
+
+
+            <!-- Installation
+            ================================================== -->
+            <section id="installation" class="sectiondoc">
+                <div class="page-header">
+                    <h1>2. Installation</h1>
+                </div>
+                <p class="lead">
+                    We <strong>highly</strong> recommend installation through Composer.
+                </p>
+                <p>Composer makes installation super easy, automatically managing dependencies and version numbers.  Since Sherlock is still in alpha state, the library updates very rapidly and may abruptly change dependencies, dependency versions or both.  Composer manages all of this with a single command.</p>
+                <p>
+                    To get started, create a <code>composer.json</code> file in your project's root directory (or add to it, if you already have a composer file).  Add this to <code>composer.json</code>
+                </p>
+                <pre class="prettyprint linenums language-json">{
+    "require": {
+        "sherlock/sherlock": "~0.1"
+    }
+}</pre>
+                <p>
+                    This instructs Composer to <a href="https://packagist.org/packages/sherlock/sherlock">download a version of Sherlock</a> that is >= 0.1 and < 1.0.  Although not terribly useful right now since Sherlock is still alpha, this scheme will become important when Sherlock reaches a 1.0 state and maintains <a href="http://semver.org">strict semantic versioning.</a>.  Next, install Composer:</p>
+                <pre class="prettyprint linenums language-shell">curl -s http://getcomposer.org/installer | php</pre>
+                <p>This downloads and installs a <code>composer.phar</code> file into your root directory.  You can install Composer globally, but a local version is usually easier to work with.  Finally, install Sherlock:</p>
+                <pre class="prettyprint linenums language-bash">php composer.phar install</pre>
+                <p>You'll see Composer print out a number of lines detailing the download progress.  When Composer finishes, you'll notice that a new <code>/vendor/</code> folder has been added to your root directory.  This is where Sherlock (and dependencies) live.</p>
+                <p>Now that Sherlock has been downloaded, you'll probably want to include it in your PHP project.  Sherlock uses the autoloader that Composer generates, so simply do this:</p>
+                <pre class="prettyprint linenums language-php">require 'vendor/autoload.php';
+use \Sherlock\Sherlock;
+
+$sherlock = new Sherlock();</pre>
+                <p>Congrats!  You've just installed Sherlock!</p>
+
+                <div class="page-header">
+                    <h1>2b. Manual Installation</h1>
+                </div>
+                <p class="lead">
+                    Manually installing Sherlock is possible, but not recommended.
+                </p>
+                <p>Sherlock can be installed even if you don't use Composer, using a built-in autoloader instead of the one provided by Composer.  Download Sherlock and include the following in your index.php or equivalent:</p>
+<pre class="prettyprint"><code class="language-json">&lt;?php
+require 'Sherlock/Sherlock.php';
+\Sherlock\Sherlock::registerAutoloader();</code></pre>
+                <p>However, this only loads Sherlock, and not any of the dependencies that Sherlock uses.  You'll have to ensure they are properly loaded before Sherlock will function.</p>
+            </section>
+
+
+            <!-- Configuration
+            ================================================== -->
+            <section id="sherlock-configuration" class="sectiondoc">
+                <div class="page-header">
+                    <h1>3. Sherlock Configuration</h1>
+                </div>
+                <p class="lead">
+                    Who needs defaults anyway?
+                </p>
+                <p>Sherlock comes with a number of good defaults, but in case you want to change them, it's super easy.  Just pass an array of settings into the constructor of Sherlock and they will automatically over-ride the defaults.  For example, logging is disabled by default (<a href="#logging">more details below</a>).  To enable logging, simply over-ride the default setting:</p>
+                <pre class="prettyprint linenums language-php">$settings['log.enabled'] = true;
+$sherlock = new Sherlock($settings);</pre>
+
+                <p>Here is a full list of Sherlock settings that may be changed or accessed:</p>
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <td>Setting</td>
+                        <td>Default</td>
+                        <td>Available options</td>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>'mode'</td>
+                        <td>'development'</td>
+                        <td>'development', 'production' (<em>Note: not currently used</em>)</td>
+                    </tr>
+                    <tr>
+                        <td>'log.enabled'</td>
+                        <td>false</td>
+                        <td>true, false</td>
+                    </tr>
+                    <tr>
+                        <td>'log.level'</td>
+                        <td>'error'</td>
+                        <td>'debug', 'info', 'notice', 'warning', 'error', 'alert', 'urgent'</td>
+                    </tr>
+                    <tr>
+                        <td>'log.handler'</td>
+                        <td>File Handler</td>
+                        <td>See the <a href="#logging">section on logging</a> for more details</td>
+                    </tr>
+                    <tr>
+                        <td>'cluster'</td>
+                        <td>Internal Cluster Object</td>
+                        <td>Predominantly an internal object, but accessible if you wish to query the state of the cluster</td>
+                    </tr>
+                    <tr>
+                        <td>'cluster.autodetect'</td>
+                        <td>false</td>
+                        <td>true, false</td>
+                    </tr>
+                    </tbody>
+                </table>
+
+                <p>
+                    If you ever need to check what settings are in effect at runtime, you may use this method:
+                </p>
+
+<pre class="prettyprint"><code class="language-php">
+//currently active settings
+$settings = $sherlock->getSherlockSettings();
+
+//default settings
+$settings = Sherlock::getDefaultSettings();
+</code></pre>
+            </section>
+
+            <!-- Connecting to your cluster
+           ================================================== -->
+            <section id="connecting-to-your-cluster" class="sectiondoc">
+                <div class="page-header">
+                    <h1>4. Connecting to your Cluster</h1>
+                </div>
+                <p class="lead">
+                    Add a node, Sherlock will track down the rest.
+                </p>
+                <p>ElasticSearch clusters are naturally gossipy - every node knows about all the other nodes.  This makes it connecting to the full cluster very easy.  Specify (at least) one node and Sherlock will sniff out the rest.  You can also specify more, if you wish to hardcode the values or don't want to risk automatic detection failing.</p>
+                <pre class="prettyprint linenums language-php">$sherlock = new Sherlock();
+$sherlock->addNode("localhost");
+
+//Ports default to 9200, if you use something else, specify it:
+$sherlock->addNode("localhost", 10200);</pre>
+            </section>
+
+            <!-- Logging
+           ================================================== -->
+            <section id="logging" class="sectiondoc">
+                <div class="page-header">
+                    <h1>4. Logging</h1>
+                </div>
+                <p class="lead">
+                    Because something always goes wrong.
+                </p>
+                <p>Logging can save the day when something goes wrong, or to help you troubleshoot problems.  By default, logging is disabled because it can add additional overhead.  But in development environments, it may be a good idea to enable logging:</p>
+                <pre class="prettyprint linenums language-php">$settings['log.enabled'] = true;
+$sherlock = new Sherlock($settings);</pre>
+
+                <p>Sherlock defaults to a log file located at <code>vendor/sherlock/sherlock/src/sherlock.log</code>.  For obvious reasons, you may want to change this location.  Over-ride the path like so:</p>
+                <pre class="prettyprint linenums language-php">$settings['log.enabled'] = true;
+
+//path is relative to vendor/sherlock/sherlock/src/sherlock/Sherlock.php
+$settings['log.file'] = '../../newlogfile.log';
+
+//Alternatively, just specify an absolute path
+$settings['log.file'] = '/var/log/sherlock/newlogfile.log';
+$sherlock = new Sherlock($settings);</pre>
+
+                <p>Sherlock defaults to logging Error messages and above.  However, you may want to turn on all Debug messages too, to help assist troubleshooting:</p>
+                <pre class="prettyprint linenums language-php">$settings['log.enabled'] = true;
+$settings['log.file'] = '/var/log/sherlock/newlogfile.log';
+$settings['log.level'] = 'debug';
+$sherlock = new Sherlock($settings);</pre>
+
+                <p>Finally, Sherlock exposes the underlying <a href="https://github.com/jbroadway/analog/">Analog</a> handler, so that you can specify a new handler (such as a Syslog handler) or write your own.  Here is an example of enabling logging to Syslog:</p>
+
+                <pre class="prettyprint linenums language-php">$syslogHandler = \Analog\Handler\Syslog::init ('analog', 'user');
+
+$settings['log.enabled'] = true;
+$settings['log.handler'] = $syslogHandler;
+$settings['log.level'] = 'debug';
+$sherlock = new Sherlock($settings);</pre>
+            </section>
+
+
+        </div>
+    </div>
+</div>

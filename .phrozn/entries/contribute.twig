@@ -1,0 +1,26 @@
+layout: default.twig
+permalink: contribute/
+contribute: active
+---
+
+<section class='section-wrapper about-page-w'>
+    <div class='container'>
+        <div class='row row-separated'>
+            <div class='span8 offset2'>
+                <h3 class='section-header'>Contribute!</h3>
+
+                <p  class='section-paragraph'>Want to get involved with Sherlock?  Awesome!  Head over to <a href="https://github.com/polyfractal/sherlock">Github and make a fork of the repository</a>, then start hacking away.  Perhaps help fix some of the <a href="https://github.com/polyfractal/sherlock/issues/">outstanding issues</a>, or implement a new feature that you wish Sherlock supported?  You'll be my best friend if you help fill out the testbed!</p>
+                <p  class='section-paragraph'>Sherlock doesn't have a formal coding standard (yet?), so try to maintain the style that the rest of the code has.  Some tips:</p>
+                <ul  class='section-paragraph'>
+                    <li style="padding-bottom: 10px">Use Docblocs on all your functions, variables and any particularly difficult sections of code.  Eventually, we will generate a PHPDoc site from the annotations</li>
+                    <li style="padding-bottom: 10px">Try to follow PSR-0/1/2 in your code.  PSR-0 is required for autoloading, and 1/2 are useful for consistent formatting.  I routinely run php-cs-fixer over the codebase to clean things up.</li>
+                    <li style="padding-bottom: 10px">Write tests for new features!  Admittedly, the current testbed is very lacking (its on the todo list).  If you add new features, I'll love you forever if you include a nice test suite.</li>
+                    <li style="padding-bottom: 10px">Sherlock should present a consistent, easy, fluid interface to developers.  I will accept ugly internal code if it makes for a beautiful exterior API.  That said, let's try and keep Sherlock sparkly and clean inside too :)</li>
+                    <li style="padding-bottom: 10px"><a href="http://phpmd.org/">PHP Mess Detector</a> and <a href="http://pear.php.net/package/PHP_CodeSniffer/redirected">PHP Code Sniffer</a> are great tools.  I routinely take their advice regarding complexity.</li>
+                </ul>
+
+            </div>
+
+        </div>
+    </div>
+</section>

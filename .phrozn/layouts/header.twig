@@ -1,0 +1,60 @@
+<header id='header'>
+    <div class='navbar navbar-fixed-top {% if entry.index != 'active' %}navbar-inverse{% endif %}'>
+        <div class='navbar-inner'>
+            <div class='container'>
+                <a class='btn btn-navbar' data-target='.nav-collapse' data-toggle='collapse'>
+                    <span class='icon-bar'></span>
+                    <span class='icon-bar'></span>
+                    <span class='icon-bar'></span>
+                </a>
+                <a href="index.html" class="brand">SherlockPHP</a>
+                <div class='nav-collapse subnav-collapse collapse pull-right' id='top-navigation'>
+                    <ul class='nav'>
+                        <li class='{{ entry.index }}'>
+                            <a href="/">Home</a>
+                        </li>
+                        <li class='{{ entry.quickstart }}'>
+                            <a href="/quickstart/">Quickstart</a>
+                        </li>
+                        <li class='dropdown {{ entry.documentation }}'>
+                            <a href="/documentation/" class="dropdown-toggle" data-toggle="dropdown">Documentation</a>
+                            <ul class='dropdown-menu'>
+                                <li>
+                                    <a href="/documentation/">Overview</a>
+                                </li>
+                                <li>
+                                    <a href="/documentation/installation/">Installation</a>
+                                </li>
+                                <li>
+                                    <a href="/documentation/index-operations/">Index Operations</a>
+                                </li>
+                                <li>
+                                    <a href="/documentation/indexing-documents/">Indexing Documents</a>
+                                </li>
+                                <li>
+                                    <a href="/documentation/search/">Search</a>
+                                </li>
+                                <li>
+                                    <a href="/documentation/errors/">Errors</a>
+                                </li>
+                                <li>
+                                    <a href="/documentation/extending-sherlock/">Extending Sherlock</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class='{{ entry.help }}'>
+                            <a href="/help/">Get Help</a>
+                        </li>
+                        <li class='{{ entry.contribute }}'>
+                            <a href="/contribute/">Contribute</a>
+                        </li>
+                        <li class='{{ entry.about }}'>
+                            <a href="/about/">about</a>
+                        </li>
+                    </ul>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
