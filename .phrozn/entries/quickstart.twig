@@ -177,7 +177,7 @@ $manualTermQuery = Sherlock::queryBuilder()->Term($manualData);
 $request->index("test")
         ->type("tweet")
         ->from(0)
-        ->to(10);
+        ->to(10)
         ->query($termQuery);</pre>
             </div>
         </div>
