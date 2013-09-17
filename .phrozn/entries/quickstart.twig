@@ -52,7 +52,7 @@ $index->index('testIndex');</pre>
             </div>
             <div class='span7'>
                 <pre class="prettyprint lang-php">//Let's add some settings
-$settings = Sherlock::indexSettings()->refresh_interval("1s")
+$settings = Sherlock::indexSettingsBuilder()->refresh_interval("1s")
                                      ->number_of_replicas(2);
 
 //Add two mappings, one a string and one a date
